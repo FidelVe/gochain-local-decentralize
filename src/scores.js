@@ -38,7 +38,8 @@ let apiHostnames = {
   server01: "server01.espanicon.team",
   sejong: "sejong.net.solidwallet.io",
   berlin: "berlin.net.solidwallet.io",
-  lisbon: "lisbon.net.solidwallet.io"
+  lisbon: "lisbon.net.solidwallet.io",
+  local: "localhost"
 };
 
 apiHostnames.default = apiHostnames.icon;
@@ -49,8 +50,8 @@ const apiRoutes = {
 };
 
 const useNetwork = {
-  hostname: apiHostnames.lisbon,
-  nid: nid.lisbon
+  hostname: apiHostnames.local,
+  nid: nid.local
 };
 
 const SCORES = {

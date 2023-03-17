@@ -27,10 +27,10 @@ async function httpx(params, data = false, runSecured = true) {
       // Print status code on console
       // console.log("Status Code: " + res.statusCode);
       // console.log("headers: ", res.headers);
-      console.log("Params:");
-      console.log(params);
-      console.log("data:");
-      console.log(data);
+      // console.log("Params:");
+      // console.log(params);
+      // console.log("data:");
+      // console.log(data);
 
       // Process chunked data
       let rawData = "";
