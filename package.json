@@ -1,0 +1,20 @@
+{
+  "name": "local-chain-test",
+  "version": "1.0.0",
+  "description": "* check balance * set bonderlist * bond * check preps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "icon-sdk-js": "^1.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.32.0"
+  }
+}
