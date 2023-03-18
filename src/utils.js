@@ -4,6 +4,7 @@ const fs = require("fs");
 const customRequest = require("./customRequest");
 const SCORES = require("./scores");
 
+const keystorePwd = "gochain";
 const prepDetails = {
   name: "local-node",
   country: "USA",
@@ -78,7 +79,7 @@ async function makeTxRequest(
 ) {
   //
   try {
-    const walletFromKs = IconWallet.loadKeystore(walletKs, 'gochain');
+    const walletFromKs = IconWallet.loadKeystore(walletKs, keystorePwd);
     const t = {
       method: method,
       params: params,
@@ -92,8 +93,8 @@ async function makeTxRequest(
       value: amount
     }
 
-    console.log('makeTxRequest params');
-    console.log(t);
+    // console.log('makeTxRequest params');
+    // console.log(t);
     const txObj = new CallTransactionBuilder()
       .from(t.from)
       .to(t.to)
@@ -110,16 +111,10 @@ async function makeTxRequest(
     }
 
     const txObj2 = txObj.build();
-    console.log('txObj2');
-    console.log(txObj2);
     const signedTx = new SignedTransaction(txObj2, walletFromKs);
     const txHash = await iconService.sendTransaction(signedTx).execute();
 
-    console.log("tx object");
-    console.log(txObj2);
-    console.log(walletFromKs.getAddress());
-    console.log(signedTx.getProperties());
-    console.log(txHash);
+    return txHash;
   } catch (err) {
     console.log(err);
   }
@@ -138,7 +133,7 @@ async function sendIcx(
 ) {
   try {
     const IcxInLoop = convertToLoop(Number(IcxAmount));
-    const walletFromKs = IconWallet.loadKeystore(walletKs, 'gochain');
+    const walletFromKs = IconWallet.loadKeystore(walletKs, keystorePwd);
     const txObj = new IcxTransactionBuilder()
       .from(walletFromKs.getAddress())
       .to(to)
@@ -175,7 +170,7 @@ async function setBonderList(
     { bonderList: arrayOfWallets },
     walletKs,
     score,
-    "0x",
+    "0x0",
     nid,
     iconService,
     CallTransactionBuilder,
@@ -189,14 +184,30 @@ async function getBonderList(wallet, score) {
   return await makeReadOnlyQuery("getBonderList", { address: wallet }, score);
 }
 
-async function setStake(from, pk, amount, score) {
-  const amountInHexLoop = convertToLoop(Number(amount), true);
+async function setStake(
+  amount,
+  walletKs,
+  score,
+  nid,
+  iconService,
+  CallTransactionBuilder,
+  IconConverter,
+  IconWallet,
+  SignedTransaction
+) {
+  const amountInHexLoop = convertToLoop(Number(amount), true, IconConverter);
   return await makeTxRequest(
     "setStake",
     { value: amountInHexLoop },
-    from,
+    walletKs,
     score,
-    pk
+    "0x0",
+    nid,
+    iconService,
+    CallTransactionBuilder,
+    IconConverter,
+    IconWallet,
+    SignedTransaction
   );
 }
 
@@ -204,14 +215,36 @@ async function getStake(wallet, score) {
   return await makeReadOnlyQuery("getStake", { address: wallet }, score);
 }
 
-async function setBond(from, walletKs, prepToBond, amount, score) {
-  const amountInHexLoop = convertToLoop(Number(amount), true);
+async function setBond(
+  amount,
+  walletKs,
+  score,
+  nid,
+  iconService,
+  CallTransactionBuilder,
+  IconConverter,
+  IconWallet,
+  SignedTransaction
+  ) {
+  const walletFromKs = IconWallet.loadKeystore(walletKs, keystorePwd);
+  const amountInHexLoop = convertToLoop(Number(amount), true, IconConverter);
   return await makeTxRequest(
     "setBond",
-    { bonds: [{ address: prepToBond, value: amountInHexLoop }] },
-    from,
+    { 
+      bonds: [{ 
+        address: walletFromKs.getAddress(), 
+        value: amountInHexLoop 
+      }] 
+    },
+    walletKs,
     score,
-    walletKs
+    "0x0",
+    nid,
+    iconService,
+    CallTransactionBuilder,
+    IconConverter,
+    IconWallet,
+    SignedTransaction
   );
 }
 
@@ -219,14 +252,36 @@ async function getBond(wallet, score) {
   return await makeReadOnlyQuery("getBond", { address: wallet }, score);
 }
 
-async function setDelegation(from, walletKs, prepToVote, amount, score) {
-  const amountInHexLoop = convertToLoop(Number(amount), true);
+async function setDelegation(
+  amount,
+  walletKs,
+  score,
+  nid,
+  iconService,
+  CallTransactionBuilder,
+  IconConverter,
+  IconWallet,
+  SignedTransaction
+  ) {
+  const amountInHexLoop = convertToLoop(Number(amount), true, IconConverter);
+  const walletLoaded = IconWallet.loadKeystore(walletKs, keystorePwd);
   return await makeTxRequest(
     "setDelegation",
-    { delegations: [{ address: prepToVote, value: amountInHexLoop }] },
-    from,
+    { 
+      delegations: [{ 
+        address: walletLoaded.getAddress(),
+        value: amountInHexLoop 
+      }] 
+    },
+    walletKs,
     score,
-    walletKs
+    "0x0",
+    nid,
+    iconService,
+    CallTransactionBuilder,
+    IconConverter,
+    IconWallet,
+    SignedTransaction
   );
 }
 
