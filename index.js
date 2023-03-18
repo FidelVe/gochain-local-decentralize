@@ -1,7 +1,8 @@
 const IconService = require("icon-sdk-js");
 const SCORES = require("./src/scores");
 const crypto = require("crypto");
-const { getKeystore,
+const {
+  getKeystore,
   getPreps,
   sendIcx,
   getIcxBalance,
@@ -20,10 +21,7 @@ const {
   CallTransactionBuilder
 } = IconService.default.IconBuilder;
 
-const {
-  hostname,
-  nid
-} = SCORES.useNetwork;
+const { hostname, nid } = SCORES.useNetwork;
 
 const IconConverter = IconService.default.IconConverter;
 const IconWallet = IconService.default.IconWallet;
@@ -49,10 +47,10 @@ const node2Ks = getKeystore(walletsPath.node2);
 const node3Ks = getKeystore(walletsPath.node3);
 // load keystore files
 // const godKsLoaded = IconWallet.loadKeystore(godKs, 'gochain');
-const node0KsLoaded = IconWallet.loadKeystore(node0Ks, 'gochain');
-const node1KsLoaded = IconWallet.loadKeystore(node1Ks, 'gochain');
-const node2KsLoaded = IconWallet.loadKeystore(node2Ks, 'gochain');
-const node3KsLoaded = IconWallet.loadKeystore(node3Ks, 'gochain');
+const node0KsLoaded = IconWallet.loadKeystore(node0Ks, "gochain");
+const node1KsLoaded = IconWallet.loadKeystore(node1Ks, "gochain");
+const node2KsLoaded = IconWallet.loadKeystore(node2Ks, "gochain");
+const node3KsLoaded = IconWallet.loadKeystore(node3Ks, "gochain");
 
 const balance = 10000000;
 const toStake = 9000000;
@@ -62,8 +60,8 @@ const bonderlist = [
   node0KsLoaded.getAddress(),
   node1KsLoaded.getAddress(),
   node2KsLoaded.getAddress(),
-  node3KsLoaded.getAddress() 
-]
+  node3KsLoaded.getAddress()
+];
 const lineBreak = "******************************************";
 async function main() {
   try {
@@ -95,35 +93,35 @@ async function main() {
       console.log(lineBreak);
 
       // Step #3: stake on each wallet
-      await stakeNode(node0Ks, toStake)
-      await stakeNode(node1Ks, toStake)
-      await stakeNode(node2Ks, toStake)
-      await stakeNode(node3Ks, toStake)
+      await stakeNode(node0Ks, toStake);
+      await stakeNode(node1Ks, toStake);
+      await stakeNode(node2Ks, toStake);
+      await stakeNode(node3Ks, toStake);
       await sleep(5000);
 
       // Step #4: vote on each wallet
-      await voteNode(node0Ks, toVote)
-      await voteNode(node1Ks, toVote)
-      await voteNode(node2Ks, toVote)
-      await voteNode(node3Ks, toVote)
+      await voteNode(node0Ks, toVote);
+      await voteNode(node1Ks, toVote);
+      await voteNode(node2Ks, toVote);
+      await voteNode(node3Ks, toVote);
       await sleep(5000);
 
-      // Step #5: vote on each wallet
-      await bondNode(node0Ks, toBond)
-      await bondNode(node1Ks, toBond)
-      await bondNode(node2Ks, toBond)
-      await bondNode(node3Ks, toBond)
+      // Step #5: bond on each wallet
+      await bondNode(node0Ks, toBond);
+      await bondNode(node1Ks, toBond);
+      await bondNode(node2Ks, toBond);
+      await bondNode(node3Ks, toBond);
       await sleep(5000);
 
       const a = await getPreps(hostname, false, port);
       console.log(a);
     } else {
       // if preps are already registered in the network;
-      console.log("Preps are already registered in the network")
+      console.log("Preps are already registered in the network");
       console.log(preps);
     }
   } catch (err) {
-    console.log('Error running main script')
+    console.log("Error running main script");
     console.log(err);
   }
 }
@@ -131,8 +129,10 @@ async function main() {
 main();
 
 async function fundNode(nodeKs, balance) {
-const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
-  console.log(`sending balance from god wallet to node ${walletLoaded.getAddress()}`)
+  const walletLoaded = IconWallet.loadKeystore(nodeKs, "gochain");
+  console.log(
+    `sending balance from god wallet to node ${walletLoaded.getAddress()}`
+  );
   const tx0 = await sendIcx(
     walletLoaded.getAddress(),
     godKs,
@@ -144,21 +144,21 @@ const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
     IconWallet,
     SignedTransaction
   );
-  console.log(`Balance sent. TxHash: ${tx0}`)
+  console.log(`Balance sent. TxHash: ${tx0}`);
   await sleep(5000);
   // fetch balance from chain
-  console.log('fetching node wallet balance from chain');
+  console.log("fetching node wallet balance from chain");
   const tx0Balance = await getIcxBalance(
     hostname,
     false,
     port,
     walletLoaded.getAddress()
-  )
+  );
   console.log(`Balance: ${tx0Balance}`);
 }
 
 async function registerNode(nodeKs) {
-const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
+  const walletLoaded = IconWallet.loadKeystore(nodeKs, "gochain");
   const localPrepDetails = { ...prepDetails };
   localPrepDetails.name = localPrepDetails.name + "-" + crypto.randomUUID();
   localPrepDetails.nodeAddress = walletLoaded.getAddress();
@@ -175,11 +175,11 @@ const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
     IconWallet,
     SignedTransaction
   );
-  console.log(`Registration result txHash: ${prep}`)
+  console.log(`Registration result txHash: ${prep}`);
 }
 
 async function stakeNode(nodeKs, amount) {
-const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
+  const walletLoaded = IconWallet.loadKeystore(nodeKs, "gochain");
 
   console.log(`Staking wallet Prep => ${walletLoaded.getAddress()}`);
   const stake = await setStake(
@@ -192,12 +192,12 @@ const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
     IconConverter,
     IconWallet,
     SignedTransaction
-  )
-  console.log(`Staking result txHash: ${stake}`)
+  );
+  console.log(`Staking result txHash: ${stake}`);
 }
 
 async function voteNode(nodeKs, amount) {
-const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
+  const walletLoaded = IconWallet.loadKeystore(nodeKs, "gochain");
 
   console.log(`voting wallet Prep => ${walletLoaded.getAddress()}`);
   const vote = await setDelegation(
@@ -210,12 +210,12 @@ const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
     IconConverter,
     IconWallet,
     SignedTransaction
-  )
-  console.log(`voting result txHash: ${vote}`)
+  );
+  console.log(`voting result txHash: ${vote}`);
 }
 
 async function bondNode(nodeKs, amount) {
-  const walletLoaded = IconWallet.loadKeystore(nodeKs, 'gochain');
+  const walletLoaded = IconWallet.loadKeystore(nodeKs, "gochain");
   // setbonderlist
   console.log("Setting bonderlist");
   const bonderlistResult = await setBonderList(
@@ -244,6 +244,6 @@ async function bondNode(nodeKs, amount) {
     IconConverter,
     IconWallet,
     SignedTransaction
-  )
-  console.log(`bonding result txHash: ${bond}`)
+  );
+  console.log(`bonding result txHash: ${bond}`);
 }
