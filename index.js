@@ -3,6 +3,7 @@ const SCORES = require("./src/scores");
 const crypto = require("crypto");
 const {
   getKeystore,
+  saveResult,
   getPreps,
   sendIcx,
   getIcxBalance,
@@ -16,7 +17,7 @@ const {
 } = require("./src/utils");
 
 const {
-  CallBuilder,
+  // CallBuilder,
   IcxTransactionBuilder,
   CallTransactionBuilder
 } = IconService.default.IconBuilder;
@@ -115,10 +116,12 @@ async function main() {
 
       const a = await getPreps(hostname, false, port);
       console.log(a);
+      saveResult(a);
     } else {
       // if preps are already registered in the network;
       console.log("Preps are already registered in the network");
       console.log(preps);
+      saveResult(preps);
     }
   } catch (err) {
     console.log("Error running main script");
