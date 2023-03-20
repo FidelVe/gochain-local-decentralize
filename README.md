@@ -11,3 +11,11 @@ f6691d1ba80d   goloop/gochain-icon:latest   "/entrypoint /bin/sh…"   18 second
 a1bf9f765db9   goloop/gochain-icon:latest   "/entrypoint /bin/sh…"   18 seconds ago   Up 17 seconds   8080/tcp, 0.0.0.0:9081->9080/tcp, :::9081->9080/tcp   gochain-local-node1-1
 f55160493783   goloop/gochain-icon:latest   "/entrypoint /bin/sh…"   18 seconds ago   Up 16 seconds   8080/tcp, 0.0.0.0:9080->9080/tcp, :::9080->9080/tcp   gochain-local-node0-1
 ```
+
+Once the local network created with the [gochain-local](https://github.com/icon-project/gochain-local) repo is up and running to decentalize the chain we run the `start` command:
+
+```bash
+npm run start
+```
+
+When the script finish a `result.json` file will be created at the root of the project with the state of the preps in the chain.
