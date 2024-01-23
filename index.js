@@ -74,48 +74,47 @@ async function main() {
 
     // if no preps are registered in the network
     // initiate decentralization process.
-    // if (preps.preps.length === 0) {
-    if (true) {
-      // // Step #1: send balance from god wallet to each node
-      // await fundNode(node0Ks, balance);
-      // console.log(lineBreak, balance);
-      // await fundNode(node1Ks, balance);
-      // console.log(lineBreak, balance);
-      // await fundNode(node2Ks, balance);
-      // console.log(lineBreak, balance);
-      // await fundNode(node3Ks, balance);
-      // console.log(lineBreak);
+    if (preps.preps.length === 0) {
+      // Step #1: send balance from god wallet to each node
+      await fundNode(node0Ks, balance);
+      console.log(lineBreak, balance);
+      await fundNode(node1Ks, balance);
+      console.log(lineBreak, balance);
+      await fundNode(node2Ks, balance);
+      console.log(lineBreak, balance);
+      await fundNode(node3Ks, balance);
+      console.log(lineBreak);
 
-      // // Step #2: Registering preps
-      // await registerNode(node0Ks);
-      // console.log(lineBreak);
-      // await registerNode(node1Ks);
-      // console.log(lineBreak);
-      // await registerNode(node2Ks);
-      // console.log(lineBreak);
-      // await registerNode(node3Ks);
-      // console.log(lineBreak);
+      // Step #2: Registering preps
+      await registerNode(node0Ks);
+      console.log(lineBreak);
+      await registerNode(node1Ks);
+      console.log(lineBreak);
+      await registerNode(node2Ks);
+      console.log(lineBreak);
+      await registerNode(node3Ks);
+      console.log(lineBreak);
 
-      // // Step #3: stake on each wallet
-      // await stakeNode(node0Ks, toStake);
-      // await stakeNode(node1Ks, toStake);
-      // await stakeNode(node2Ks, toStake);
-      // await stakeNode(node3Ks, toStake);
-      // await sleep(5000);
+      // Step #3: stake on each wallet
+      await stakeNode(node0Ks, toStake);
+      await stakeNode(node1Ks, toStake);
+      await stakeNode(node2Ks, toStake);
+      await stakeNode(node3Ks, toStake);
+      await sleep(5000);
 
-      // // Step #4: vote on each wallet
-      // await voteNode(node0Ks, toVote);
-      // await voteNode(node1Ks, toVote);
-      // await voteNode(node2Ks, toVote);
-      // await voteNode(node3Ks, toVote);
-      // await sleep(5000);
+      // Step #4: vote on each wallet
+      await voteNode(node0Ks, toVote);
+      await voteNode(node1Ks, toVote);
+      await voteNode(node2Ks, toVote);
+      await voteNode(node3Ks, toVote);
+      await sleep(5000);
 
-      // // Step #5: bond on each wallet
-      // await bondNode(node0Ks, toBond);
-      // await bondNode(node1Ks, toBond);
-      // await bondNode(node2Ks, toBond);
-      // await bondNode(node3Ks, toBond);
-      // await sleep(5000);
+      // Step #5: bond on each wallet
+      await bondNode(node0Ks, toBond);
+      await bondNode(node1Ks, toBond);
+      await bondNode(node2Ks, toBond);
+      await bondNode(node3Ks, toBond);
+      await sleep(5000);
 
       // Step #5: bond on each wallet
       await registerPubKey(node0Ks);
