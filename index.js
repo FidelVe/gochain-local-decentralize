@@ -2,18 +2,20 @@ const IconService = require("icon-sdk-js");
 const SCORES = require("./src/scores");
 const crypto = require("crypto");
 const {
-  getKeystore,
-  saveResult,
-  getPreps,
-  sendIcx,
   getIcxBalance,
-  sleep,
-  registerPrep,
+  getKeystore,
+  getPreps,
   prepDetails,
-  setStake,
-  setDelegation,
+  registerPRepNodePublicKey,
+  registerPrep,
+  saveResult,
+  sendIcx,
+  setBond,
   setBonderList,
-  setBond
+  setDelegation,
+  setStake,
+  sleep,
+  getTxResult
 } = require("./src/utils");
 
 const {
@@ -28,7 +30,7 @@ const IconConverter = IconService.default.IconConverter;
 const IconWallet = IconService.default.IconWallet;
 const SignedTransaction = IconService.default.SignedTransaction;
 
-const port = 9080;
+const port = 9082;
 const API_NODE = `http://${hostname}:${port}/api/v3`;
 const httpProvider = new IconService.default.HttpProvider(API_NODE);
 const iconService = new IconService.default(httpProvider);
@@ -72,46 +74,54 @@ async function main() {
 
     // if no preps are registered in the network
     // initiate decentralization process.
-    if (preps.preps.length === 0) {
-      // Step #1: send balance from god wallet to each node
-      await fundNode(node0Ks, balance);
-      console.log(lineBreak, balance);
-      await fundNode(node1Ks, balance);
-      console.log(lineBreak, balance);
-      await fundNode(node2Ks, balance);
-      console.log(lineBreak, balance);
-      await fundNode(node3Ks, balance);
-      console.log(lineBreak);
+    // if (preps.preps.length === 0) {
+    if (true) {
+      // // Step #1: send balance from god wallet to each node
+      // await fundNode(node0Ks, balance);
+      // console.log(lineBreak, balance);
+      // await fundNode(node1Ks, balance);
+      // console.log(lineBreak, balance);
+      // await fundNode(node2Ks, balance);
+      // console.log(lineBreak, balance);
+      // await fundNode(node3Ks, balance);
+      // console.log(lineBreak);
 
-      // Step #2: Registering preps
-      await registerNode(node0Ks);
-      console.log(lineBreak);
-      await registerNode(node1Ks);
-      console.log(lineBreak);
-      await registerNode(node2Ks);
-      console.log(lineBreak);
-      await registerNode(node3Ks);
-      console.log(lineBreak);
+      // // Step #2: Registering preps
+      // await registerNode(node0Ks);
+      // console.log(lineBreak);
+      // await registerNode(node1Ks);
+      // console.log(lineBreak);
+      // await registerNode(node2Ks);
+      // console.log(lineBreak);
+      // await registerNode(node3Ks);
+      // console.log(lineBreak);
 
-      // Step #3: stake on each wallet
-      await stakeNode(node0Ks, toStake);
-      await stakeNode(node1Ks, toStake);
-      await stakeNode(node2Ks, toStake);
-      await stakeNode(node3Ks, toStake);
-      await sleep(5000);
+      // // Step #3: stake on each wallet
+      // await stakeNode(node0Ks, toStake);
+      // await stakeNode(node1Ks, toStake);
+      // await stakeNode(node2Ks, toStake);
+      // await stakeNode(node3Ks, toStake);
+      // await sleep(5000);
 
-      // Step #4: vote on each wallet
-      await voteNode(node0Ks, toVote);
-      await voteNode(node1Ks, toVote);
-      await voteNode(node2Ks, toVote);
-      await voteNode(node3Ks, toVote);
-      await sleep(5000);
+      // // Step #4: vote on each wallet
+      // await voteNode(node0Ks, toVote);
+      // await voteNode(node1Ks, toVote);
+      // await voteNode(node2Ks, toVote);
+      // await voteNode(node3Ks, toVote);
+      // await sleep(5000);
+
+      // // Step #5: bond on each wallet
+      // await bondNode(node0Ks, toBond);
+      // await bondNode(node1Ks, toBond);
+      // await bondNode(node2Ks, toBond);
+      // await bondNode(node3Ks, toBond);
+      // await sleep(5000);
 
       // Step #5: bond on each wallet
-      await bondNode(node0Ks, toBond);
-      await bondNode(node1Ks, toBond);
-      await bondNode(node2Ks, toBond);
-      await bondNode(node3Ks, toBond);
+      await registerPubKey(node0Ks);
+      await registerPubKey(node1Ks);
+      await registerPubKey(node2Ks);
+      await registerPubKey(node3Ks);
       await sleep(5000);
 
       const a = await getPreps(hostname, false, port);
@@ -249,4 +259,27 @@ async function bondNode(nodeKs, amount) {
     SignedTransaction
   );
   console.log(`bonding result txHash: ${bond}`);
+}
+
+async function registerPubKey(nodeKs) {
+  const walletLoaded = IconWallet.loadKeystore(nodeKs, "gochain");
+  const pubKey = walletLoaded.getPublicKey(true);
+  const address = walletLoaded.getAddress();
+  console.log(`PubKey: ${pubKey}`);
+  const txResult = await registerPRepNodePublicKey(
+    nodeKs,
+    pubKey,
+    address,
+    SCORES.mainnet.governance,
+    nid,
+    iconService,
+    CallTransactionBuilder,
+    IconConverter,
+    IconWallet,
+    SignedTransaction
+  );
+  console.log(`Result of pubKey registration. txHash ${txResult}`);
+  const txResult2 = await getTxResult(txResult, API_NODE);
+  console.log("TxResult2");
+  console.log(txResult2);
 }

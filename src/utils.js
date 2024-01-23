@@ -186,6 +186,32 @@ async function setBonderList(
   );
 }
 
+async function registerPRepNodePublicKey(
+  walletKs,
+  pubKey,
+  address,
+  score,
+  nid,
+  iconService,
+  CallTransactionBuilder,
+  IconConverter,
+  IconWallet,
+  SignedTransaction
+) {
+  return await makeTxRequest(
+    "registerPRepNodePublicKey",
+    { pubKey: pubKey, address: address },
+    walletKs,
+    score,
+    "0x0",
+    nid,
+    iconService,
+    CallTransactionBuilder,
+    IconConverter,
+    IconWallet,
+    SignedTransaction
+  );
+}
 async function getBonderList(wallet, score) {
   return await makeReadOnlyQuery("getBonderList", { address: wallet }, score);
 }
@@ -697,32 +723,33 @@ async function sleep(time = 1000) {
 }
 
 module.exports = {
-  sendIcx,
-  setBonderList,
-  getBonderList,
-  registerPrep,
-  setPrep,
-  setStake,
-  getStake,
-  setBond,
-  getBond,
-  setDelegation,
-  getDelegation,
-  registerTextNetworkProposal,
   approveNetworkProposal,
-  rejectNetworkProposal,
+  decimalToHex,
+  getAllNetworkProposals,
+  getBond,
+  getBonderList,
+  getDelegation,
+  getIcxBalance,
   getKeystore,
   getNetworkProposal,
-  getAllNetworkProposals,
   getPrep,
   getPreps,
+  getScoreApi,
+  getStake,
+  getTotalSupply,
   getTxByHash,
   getTxResult,
-  getIcxBalance,
-  getScoreApi,
-  getTotalSupply,
-  decimalToHex,
-  sleep,
   prepDetails,
-  saveResult
+  registerPRepNodePublicKey,
+  registerPrep,
+  registerTextNetworkProposal,
+  rejectNetworkProposal,
+  saveResult,
+  sendIcx,
+  setBond,
+  setBonderList,
+  setDelegation,
+  setPrep,
+  setStake,
+  sleep
 };
