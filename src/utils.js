@@ -476,7 +476,7 @@ async function getIcxBalance(hostname, https, port, address, decimals = 2) {
     return Number(fromHexInLoop(request.result).toFixed(decimals));
   }
 }
-async function getTxResult(txHash, apiNode) {
+async function getTxResult(txHash, hostname, isHttps, port) {
   const JSONRPCObject = JSON.stringify({
     ...makeJSONRPCRequestObj("icx_getTransactionResult"),
     params: {
@@ -487,7 +487,9 @@ async function getTxResult(txHash, apiNode) {
   const request = await customRequest(
     SCORES.apiRoutes.v3,
     JSONRPCObject,
-    apiNode
+    hostname,
+    isHttps,
+    port
   );
   if (request == null) {
     // Error was raised and handled inside customRequest, the returned value

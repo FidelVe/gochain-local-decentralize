@@ -279,7 +279,7 @@ async function registerPubKey(nodeKs) {
     SignedTransaction
   );
   console.log(`Result of pubKey registration. txHash ${txResult}`);
-  const txResult2 = await getTxResult(txResult, API_NODE);
+  const txResult2 = await getTxResult(txResult, hostname, false, port);
   console.log("TxResult2");
   console.log(txResult2);
 }
