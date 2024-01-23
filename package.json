@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.1",
-    "icon-sdk-js": "^1.2.3"
+    "icon-sdk-js": "^1.5.2"
   },
   "devDependencies": {
     "eslint": "^8.32.0"
